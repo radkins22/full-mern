@@ -10,3 +10,5 @@ require("dotenv").config();
 
 // Middleware
 const User = require("./models/user.model");
+const Book = require("./models/book.model");
+const Comment = require("./models/comment.model");
