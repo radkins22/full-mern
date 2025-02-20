@@ -1,6 +1,6 @@
 # this is the git ignore file
 
-node_modules
+node_modules/
 package-lock.json
 
 .env
