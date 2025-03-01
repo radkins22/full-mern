@@ -29,6 +29,9 @@ bookRoutes("/api/books", app);
 const commentRoutes = require("./routes/comment.routes");
 commentRoutes("/api/comments", app);
 
+const userRoutes = require("./routes/user.routes");
+userRoutes("/api/users", app);
+
 // Listener
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
