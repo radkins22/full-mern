@@ -1,10 +1,19 @@
 const BookController = require("../controllers/book.controllers");
 
-const { create, update, read, _delete } = BookController;
+const { create, read, _delete, readOne, update, addComment, _deleteOne } =
+  BookController;
 
 module.exports = (prefix, app) => {
   // "/api/books"
   app.post(prefix, create);
+  app.get(prefix, read);
+  app.delete(prefix, _delete);
+
+  // "api/books/:_id"
+  app.get(`${prefix}/:_id`, readOne);
+  app.put(`${prefix}/:_id`, update);
+  app.put(`${prefix}/:_id/comment`, addComment);
+  app.delete(`${prefix}/:_id`, _deleteOne);
 };
 
 // Notes on Routes structure:
