@@ -1,17 +1,15 @@
 const UserController = require("../controllers/user.controllers");
 
-const { create, read, _delete, readOne, update, addComment, _deleteOne } =
-  UserController;
+const { register, login, logout, auth, update, _delete } = UserController;
 
 module.exports = (prefix, app) => {
   // "/api/users"
-  app.post(prefix, create);
-  app.get(prefix, read);
-  app.delete(prefix, _delete);
-
-  // "api/users/:_id"
-  app.get(`${prefix}/:_id`, readOne);
+  // passport auth routes
+  app.post(`${prefix}/register`, register);
+  app.post(`${prefix}/login`, login);
+  app.post(`${prefix}/logout`, logout);
+  app.get(`${prefix}/auth`, auth);
+  // general CRUD routes (should authenticate before any changes)
   app.put(`${prefix}/:_id`, update);
-  app.put(`${prefix}/:_id/comment`, addComment);
-  app.delete(`${prefix}/:_id`, _deleteOne);
+  app.delete(`${prefix}/:_id`, _delete);
 };
