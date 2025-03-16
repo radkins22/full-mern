@@ -51,7 +51,7 @@ const SignIn = () => {
             required
           />
           <button type="submit" className="signup-button">
-            Sign In
+            <Link to="/dashboard">Sign In</Link>
           </button>
         </form>
         <p className="signin-link">
