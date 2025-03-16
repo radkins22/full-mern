@@ -3,6 +3,9 @@ const User = require("../models/user.model");
 
 module.exports = {
   register: (req, res) => {
+    console.log("TEST");
+    console.log(req.body);
+    // User.findOne().then().catch();
     User.findOne({ email: req.body.email })
       .then((user) => {
         if (user) {
@@ -22,7 +25,7 @@ module.exports = {
       if (err) res.json({ msg: "Error", Error: err });
 
       if (!user) res.json({ msg: "Error", Error: "User not found" });
-      else{
+      else {
         req.login(user, (err) => {
           if (err) res.json({ msg: "Error", Error: err });
           res.json({ msg: "Success", user });
