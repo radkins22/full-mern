@@ -29,7 +29,7 @@ app.use(
 // Passport
 app.use(passport.initialize());
 app.use(passport.session());
-require("./config/passport.config");
+require("./config/passport.config")(passport);
 
 //Logger
 app.use((req, res, next) => {
