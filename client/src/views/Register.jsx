@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./signUp.css";
-import { Link } from "react-router-dom";
+import "./register.css";
+import { Link, useNavigate } from "react-router-dom";
 
-const SignUp = () => {
+const Register = () => {
+  const nav = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -14,18 +15,45 @@ const SignUp = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleValidation = (obj) => {
+    if (obj.username === "") {
+      alert("Please enter a username.");
+      return false;
+    }
+    if (obj.email === "") {
+      alert("Please enter an email.");
+      return false;
+    }
+    if (obj.password === "") {
+      alert("Please enter a password.");
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios
-      .post("http://localhost:8080/api/users", formData)
-      .then((res) => {
-        console.log("Sign-up successful:", res.data);
-        alert("Sign-up successful!");
+    if (handleValidation(formData)) {
+      await axios({
+        method: "POST",
+        url: "http://localhost:8080/api/users/register",
+        data: formData,
+        withCredentials: true,
       })
-      .catch((error) => {
-        console.log("Error signing up:", error);
-        alert("Sign-up failed.");
-      });
+        .then((res) => {
+          if (res.data.msg === "Success") {
+            console.log("Sign-up successful:", res.data);
+            alert("Sign-up successful!");
+            nav("/login");
+          } else {
+            alert(res.data.Error);
+          }
+        })
+        .catch((error) => {
+          console.log("Axios Error signing up:", error);
+          alert("Sign-up failed.");
+        });
+    }
   };
 
   return (
@@ -40,7 +68,6 @@ const SignUp = () => {
             value={formData.username}
             onChange={handleChange}
             className="signup-input"
-            required
           />
           <input
             type="email"
@@ -49,7 +76,6 @@ const SignUp = () => {
             value={formData.email}
             onChange={handleChange}
             className="signup-input"
-            required
           />
           <input
             type="password"
@@ -58,13 +84,12 @@ const SignUp = () => {
             value={formData.password}
             onChange={handleChange}
             className="signup-input"
-            required
           />
           <button type="submit" className="signup-button">
             Sign Up
           </button>
           <p className="signin-link">
-            Already have an account? <Link to="/signIn">Sign in</Link>
+            Already have an account? <Link to="/login">Login</Link>
           </p>
         </form>
       </div>
@@ -72,4 +97,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default Register;

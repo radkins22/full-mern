@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "./dashboard.css";
 import { Link } from "react-router-dom";
 
-
 const Dashboard = () => {
   const [username, setUsername] = useState("User");
   const [books, setBooks] = useState([]);
@@ -26,7 +25,7 @@ const Dashboard = () => {
         <div className="welcome-container">
           <h1 className="welcome-text">Welcome, {username}!</h1>
           <p className="signout-link">
-            <Link to="/signIn">Sign out</Link>
+            <Link to="/login">Sign out</Link>
           </p>
         </div>
         <h2 className="add-book-title">Add a Book</h2>
