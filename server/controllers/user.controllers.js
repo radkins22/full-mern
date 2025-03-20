@@ -4,7 +4,6 @@ const passport = require("passport");
 
 module.exports = {
   register: (req, res) => {
-    console.log(req.body);
     User.findOne({ email: req.body.email })
       .then((user) => {
         if (user) {
