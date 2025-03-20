@@ -3,10 +3,12 @@ import axios from "axios";
 import "./signUp.css";
 import { Link } from "react-router-dom";
 
-const SignIn = () => {
+const SignUp = () => {
   const [formData, setFormData] = useState({
     username: "",
+    email: "",
     password: "",
+    // repeatPassword: "",
   });
 
   const handleChange = (e) => {
@@ -19,24 +21,33 @@ const SignIn = () => {
       .post("http://localhost:8080/api/users", formData)
       .then((res) => {
         console.log("Sign-up successful:", res.data);
-        alert("Sign-In successful!");
+        alert("Sign-up successful!");
       })
       .catch((error) => {
         console.log("Error signing up:", error);
-        alert("Sign-In failed.");
+        alert("Sign-up failed.");
       });
   };
 
   return (
     <div className="signup-container">
       <div className="signup-box">
-        <h2 className="signup-title">Sign In</h2>
+        <h2 className="signup-title">Create Account</h2>
         <form onSubmit={handleSubmit}>
           <input
             type="text"
             name="username"
             placeholder="Username"
             value={formData.username}
+            onChange={handleChange}
+            className="signup-input"
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
             onChange={handleChange}
             className="signup-input"
             required
@@ -51,15 +62,15 @@ const SignIn = () => {
             required
           />
           <button type="submit" className="signup-button">
-            <Link to="/dashboard">Sign In</Link>
+            Sign Up
           </button>
+          <p className="signin-link">
+            Already have an account? <Link to="/login">Login</Link>
+          </p>
         </form>
-        <p className="signin-link">
-          Don't have an account? <Link to="/">Sign up</Link>
-        </p>
       </div>
     </div>
   );
 };
 
-export default SignIn;
+export default Register;

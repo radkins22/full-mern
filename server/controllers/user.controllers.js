@@ -1,11 +1,9 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/user.model");
+const passport = require("passport");
 
 module.exports = {
   register: (req, res) => {
-    console.log("TEST");
-    console.log(req.body);
-    // User.findOne().then().catch();
     User.findOne({ email: req.body.email })
       .then((user) => {
         if (user) {

@@ -1,15 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./signUp.css";
+import "./register.css";
 import { Link, useNavigate } from "react-router-dom";
 
-const SignUp = () => {
+const Login = () => {
   const nav = useNavigate();
   const [formData, setFormData] = useState({
-    username: "",
     email: "",
     password: "",
-    // repeatPassword: "",
   });
 
   const handleChange = (e) => {
@@ -17,53 +15,55 @@ const SignUp = () => {
   };
 
   const handleValidation = (obj) => {
-    // check if username is empty
-    if (obj.username === "") {
-      alert("Username cannot be empty");
-      return false;
-    }
-    // check if email is empty
     if (obj.email === "") {
-      alert("Email cannot be empty");
+      alert("Please enter an email.");
       return false;
     }
-    // check if password is empty
     if (obj.password === "") {
-      alert("Password cannot be empty");
+      alert("Please enter a password.");
       return false;
     }
-    // if (obj.repeatPassword === "") {
-    //   alert("Repeat Password cannot be empty");
-    //   return false;
-    // }
-    // if (obj.password !== obj.repeatPassword) {
-    //   alert("Passwords do not match");
-    //   return false;
-    // }
     return true;
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   await axios({
+  //     method: "POST",
+  //     url: "http://localhost:8080/api/users/login",
+  //     data: formData,
+  //     withCredentials: true,
+  //   })
+  //     .then((res) => {
+  //       console.log("Sign-up successful:", res.data);
+  //       alert("Sign-In successful!");
+  //     })
+  //     .catch((error) => {
+  //       console.log("Error signing up:", error);
+  //       alert("Sign-In failed.");
+  //     });
+  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (handleValidation(formData)) {
       await axios({
         method: "POST",
+        url: "http://localhost:8080/api/users/login",
         data: formData,
         withCredentials: true,
-        url: "http://localhost:8080/api/users/register",
       })
         .then((res) => {
           if (res.data.msg === "Success") {
-            console.log("Sign-up successful:", res.data);
-            alert("Sign-up successful!");
-            nav("/signIn");
+            console.log("Sign-in successful:", res.data);
+            alert("Sign-in successful!");
+            nav("/dashboard");
           } else {
             alert(res.data.Error);
           }
         })
         .catch((error) => {
-          console.log("Axios Error signing up:", error);
-          alert("Sign-up failed.");
+          console.log("Axios Error signing in:", error);
+          alert("Sign-in failed.");
         });
     }
   };
@@ -71,25 +71,16 @@ const SignUp = () => {
   return (
     <div className="signup-container">
       <div className="signup-box">
-        <h2 className="signup-title">Create Account</h2>
+        <h2 className="signup-title">Sign In</h2>
         <form onSubmit={handleSubmit}>
           <input
             type="text"
-            name="username"
-            placeholder="Username"
-            value={formData.username}
-            onChange={handleChange}
-            className="signup-input"
-            // required
-          />
-          <input
-            type="email"
             name="email"
-            placeholder="Email"
+            placeholder="email"
             value={formData.email}
             onChange={handleChange}
             className="signup-input"
-            // required
+            required
           />
           <input
             type="password"
@@ -98,18 +89,18 @@ const SignUp = () => {
             value={formData.password}
             onChange={handleChange}
             className="signup-input"
-            // required
+            required
           />
           <button type="submit" className="signup-button">
-            Sign Up
+            Login
           </button>
-          <p className="signin-link">
-            Already have an account? <Link to="/signIn">Sign in</Link>
-          </p>
         </form>
+        <p className="signin-link">
+          Don't have an account? <Link to="/">Sign up</Link>
+        </p>
       </div>
     </div>
   );
 };
 
-export default SignUp;
+export default Login;
