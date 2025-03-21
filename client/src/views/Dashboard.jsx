@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./dashboard.css";
 import { Link } from "react-router-dom";
 
-const Dashboard = () => {
-  const [username, setUsername] = useState("User");
+const Dashboard = ({ user }) => {
   const [books, setBooks] = useState([]);
   const [newBook, setNewBook] = useState({ title: "", author: "" });
   const [comments, setComments] = useState({});
+
+  useEffect(() => {
+    if (user) {
+      setBooks(user.books || []);
+    }
+  }, [user]);
 
   const addBook = () => {
     if (newBook.title && newBook.author) {
@@ -23,7 +28,7 @@ const Dashboard = () => {
     <div className="library-dashboard">
       <div className="input-container">
         <div className="welcome-container">
-          <h1 className="welcome-text">Welcome, {username}!</h1>
+          <h1 className="welcome-text">Welcome, {user?.username}!</h1>
           <p className="signout-link">
             <Link to="/login">Sign out</Link>
           </p>
