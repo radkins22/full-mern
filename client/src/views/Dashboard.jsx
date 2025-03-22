@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./dashboard.css";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const Dashboard = ({ user }) => {
+const Dashboard = ({ user, comment }) => {
+  const nav = useNavigate();
   const [books, setBooks] = useState([]);
   const [newBook, setNewBook] = useState({ title: "", author: "" });
-  const [comments, setComments] = useState({});
 
   useEffect(() => {
     axios
@@ -27,7 +28,7 @@ const Dashboard = ({ user }) => {
         .post("http://localhost:8080/api/books", newBook)
         .then((res) => {
           console.log("Book Response:", res.data);
-          setBooks([...books, response.data.book]);
+          setBooks([...books, res.data.book]);
           setNewBook({ title: "", author: "" });
         })
         .catch((error) => {
@@ -36,20 +37,22 @@ const Dashboard = ({ user }) => {
     }
   };
 
-  const addComment = (id, comment) => {
-    axios
-      .put(`http://localhost:8080/api/books/${id}/comment`, { comment })
-      .then((res) => {
-        console.log("Comment Response:", res.data);
-        setBooks(
-          books.map((book) => (book._id === id ? res.data.book : book))
-        );
-        setComments({ ...comments, [id]: "" });
-      })
-      .catch((error) => {
-        console.error("Error adding comment:", error);
-      });
+  const viewBook = () => {
+    nav("/book");
   };
+
+  // const addComment = (id, comment) => {
+  //   axios
+  //     .put(`http://localhost:8080/api/books/${id}/comment`, { comment })
+  //     .then((res) => {
+  //       console.log("Comment Response:", res.data);
+  //       setBooks(books.map((book) => (book._id === id ? res.data.book : book)));
+  //       setComments({ ...comments, [id]: "" });
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error adding comment:", error);
+  //     });
+  // };
 
   return (
     <div className="library-dashboard">
@@ -85,7 +88,8 @@ const Dashboard = ({ user }) => {
           <div key={book._id} className="book-card">
             <h2 className="book-title">{book.title}</h2>
             <p className="book-author">by {book.author}</p>
-            <input
+            <p>Comments: {comment} </p>
+            {/* <input
               type="text"
               placeholder="Add a comment"
               value={comments[book._id] || ""}
@@ -93,12 +97,15 @@ const Dashboard = ({ user }) => {
                 setComments({ ...comments, [book._id]: e.target.value })
               }
               className="comment-input"
-            />
-            <button
+            /> */}
+            {/* <button
               onClick={() => addComment(book._id, comments[book._id])}
               className="add-button"
             >
               Add Comment
+            </button> */}
+            <button onClick={() => viewBook(book._id)} className="add-button">
+              View Book
             </button>
             {book.comments.map((comment, index) => (
               <p key={index} className="comment-text">
