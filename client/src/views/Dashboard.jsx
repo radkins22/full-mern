@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import "./dashboard.css";
 import { Link } from "react-router-dom";
 
@@ -8,29 +9,56 @@ const Dashboard = ({ user }) => {
   const [comments, setComments] = useState({});
 
   useEffect(() => {
-    if (user) {
-      setBooks(user.books || []);
-    }
-  }, [user]);
+    axios
+      .get("http://localhost:8080/api/books")
+      .then((res) => {
+        console.log("All Books Response:", res.data);
+        setBooks(res.data.books);
+      })
+      .catch((error) => {
+        console.error("Error fetching books:", error);
+      });
+  }, []);
 
-  const addBook = () => {
+  const addBook = (e) => {
+    e.preventDefault();
     if (newBook.title && newBook.author) {
-      setBooks([...books, { ...newBook, id: Date.now() }]);
-      setNewBook({ title: "", author: "" });
+      axios
+        .post("http://localhost:8080/api/books", newBook)
+        .then((res) => {
+          console.log("Book Response:", res.data);
+          setBooks([...books, response.data.book]);
+          setNewBook({ title: "", author: "" });
+        })
+        .catch((error) => {
+          console.error("Error adding book:", error);
+        });
     }
   };
 
   const addComment = (id, comment) => {
-    setComments({ ...comments, [id]: comment });
+    axios
+      .put(`http://localhost:8080/api/books/${id}/comment`, { comment })
+      .then((res) => {
+        console.log("Comment Response:", res.data);
+        setBooks(
+          books.map((book) => (book._id === id ? res.data.book : book))
+        );
+        setComments({ ...comments, [id]: "" });
+      })
+      .catch((error) => {
+        console.error("Error adding comment:", error);
+      });
   };
 
   return (
     <div className="library-dashboard">
+      {console.log("user", user)}
       <div className="input-container">
         <div className="welcome-container">
           <h1 className="welcome-text">Welcome, {user?.username}!</h1>
           <p className="signout-link">
-            <Link to="/login">Sign out</Link>
+            <Link to="/">Sign out</Link>
           </p>
         </div>
         <h2 className="add-book-title">Add a Book</h2>
@@ -54,18 +82,29 @@ const Dashboard = ({ user }) => {
       </div>
       <div className="book-list">
         {books.map((book) => (
-          <div key={book.id} className="book-card">
+          <div key={book._id} className="book-card">
             <h2 className="book-title">{book.title}</h2>
             <p className="book-author">by {book.author}</p>
             <input
               type="text"
               placeholder="Add a comment"
-              onChange={(e) => addComment(book.id, e.target.value)}
+              value={comments[book._id] || ""}
+              onChange={(e) =>
+                setComments({ ...comments, [book._id]: e.target.value })
+              }
               className="comment-input"
             />
-            {comments[book.id] && (
-              <p className="comment-text">Comment: {comments[book.id]}</p>
-            )}
+            <button
+              onClick={() => addComment(book._id, comments[book._id])}
+              className="add-button"
+            >
+              Add Comment
+            </button>
+            {book.comments.map((comment, index) => (
+              <p key={index} className="comment-text">
+                Comment: {comment.quote}
+              </p>
+            ))}
           </div>
         ))}
       </div>

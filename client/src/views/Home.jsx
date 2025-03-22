@@ -12,7 +12,8 @@ const Home = ({ handleUserAuth }) => {
   const handleToggle = () => setIsReg(!isReg);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleValidation = (obj) => {
@@ -75,7 +76,7 @@ const Home = ({ handleUserAuth }) => {
               type="text"
               name="username"
               placeholder="Username"
-              value={formData.username}
+              value={formData.username || ""}
               onChange={handleChange}
               className="signup-input"
             />
@@ -84,7 +85,7 @@ const Home = ({ handleUserAuth }) => {
             type="email"
             name="email"
             placeholder="Email"
-            value={formData.email}
+            value={formData.email || ""}
             onChange={handleChange}
             className="signup-input"
           />
@@ -92,7 +93,7 @@ const Home = ({ handleUserAuth }) => {
             type="password"
             name="password"
             placeholder="Password"
-            value={formData.password}
+            value={formData.password || ""}
             onChange={handleChange}
             className="signup-input"
           />
