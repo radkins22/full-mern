@@ -4,11 +4,10 @@ import "./dashboard.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-const Dashboard = ({ user, comment}) => {
+const Dashboard = ({ user, comment }) => {
   const nav = useNavigate();
   const [books, setBooks] = useState([]);
   const [newBook, setNewBook] = useState({ title: "", author: "" });
-
 
   useEffect(() => {
     axios
@@ -38,24 +37,22 @@ const Dashboard = ({ user, comment}) => {
     }
   };
 
- 
-
-  const viewBook = (id) => {
-    nav(`/book/${id}`);
+  const viewBook = () => {
+    nav("/book");
   };
 
-  const addComment = (id, comment) => {
-    axios
-      .put(`http://localhost:8080/api/books/${id}/comment`, { comment })
-      .then((res) => {
-        console.log("Comment Response:", res.data);
-        setBooks(books.map((book) => (book._id === id ? res.data.book : book)));
-        setComments({ ...comments, [id]: "" });
-      })
-      .catch((error) => {
-        console.error("Error adding comment:", error);
-      });
-  };
+  // const addComment = (id, comment) => {
+  //   axios
+  //     .put(`http://localhost:8080/api/books/${id}/comment`, { comment })
+  //     .then((res) => {
+  //       console.log("Comment Response:", res.data);
+  //       setBooks(books.map((book) => (book._id === id ? res.data.book : book)));
+  //       setComments({ ...comments, [id]: "" });
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error adding comment:", error);
+  //     });
+  // };
 
   return (
     <div className="library-dashboard">
