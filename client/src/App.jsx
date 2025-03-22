@@ -1,19 +1,24 @@
-import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Register from "./views/Register";
-import Login from "./views/Login";
+import React, { useState } from "react";
+import { Route, Routes } from "react-router-dom";
+import Toast from "./Components/Toast";
+import Home from "./views/Home";
 import Dashboard from "./views/Dashboard";
 
 function App() {
+  const [user, setUser] = useState(null);
+
+  const handleUserAuth = (userData) => setUser(userData);
   return (
     <>
-      <Router>
-        <Routes>
-          <Route exact path="/" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Routes>
-      </Router>
+      <Toast />
+      <Routes>
+        <Route
+          exact
+          path="/"
+          element={<Home handleUserAuth={handleUserAuth} />}
+        />
+        <Route path="/dashboard" element={<Dashboard user={user} />} />
+      </Routes>
     </>
   );
 }
