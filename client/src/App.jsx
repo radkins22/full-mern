@@ -19,7 +19,7 @@ function App() {
           element={<Home handleUserAuth={handleUserAuth} />}
         />
         <Route path="/dashboard" element={<Dashboard user={user} />} />
-        <Route path="/book" element={<Book user={user} />} />
+        <Route path="/books/:_id" element={<Book user={user} />} />
       </Routes>
     </>
   );

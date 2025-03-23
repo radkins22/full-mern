@@ -12,7 +12,7 @@ module.exports = (prefix, app) => {
   // "api/books/:_id"
   app.get(`${prefix}/:_id`, readOne);
   app.put(`${prefix}/:_id`, update);
-  app.put(`${prefix}/:_id/comment`, addComment);
+  app.put(`${prefix}/:_id/addComment`, addComment);
   app.delete(`${prefix}/:_id`, _deleteOne);
 };
 
