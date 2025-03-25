@@ -10,15 +10,32 @@ const Dashboard = ({ user, comment }) => {
   const [newBook, setNewBook] = useState({ title: "", author: "" });
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8080/api/books")
-      .then((res) => {
-        console.log("All Books Response:", res.data);
-        setBooks(res.data.books);
-      })
-      .catch((error) => {
-        console.error("Error fetching books:", error);
-      });
+    // IIFE - Immediately Invoked Function Expression
+    // (async()=> {
+    //   await axios
+    //   .get("http://localhost:8080/api/books")
+    //   .then((res) => {
+    //     console.log("All Books Response:", res.data);
+    //     setBooks(res.data.books);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error fetching books:", error);
+    //   });
+    // })()
+
+    const getBooks = async () => {
+      await axios
+        .get("http://localhost:8080/api/books")
+        .then((res) => {
+          console.log("All Books Response:", res.data);
+          setBooks(res.data.books);
+        })
+        .catch((error) => {
+          console.error("Error fetching books:", error);
+        });
+    };
+
+    getBooks();
   }, []);
 
   const addBook = (e) => {
@@ -37,9 +54,7 @@ const Dashboard = ({ user, comment }) => {
     }
   };
 
-  const viewBook = () => {
-    nav("/book");
-  };
+  const viewBook = (e) => nav(`/books/${e.target.id}`);
 
   // const addComment = (id, comment) => {
   //   axios
@@ -83,38 +98,14 @@ const Dashboard = ({ user, comment }) => {
           Add Book
         </button>
       </div>
-      <div className="book-list">
+      <ul className="book-list">
+        {/* map through all books, display them, have the ability to select a specific book */}
         {books.map((book) => (
-          <div key={book._id} className="book-card">
-            <h2 className="book-title">{book.title}</h2>
-            <p className="book-author">by {book.author}</p>
-            <p>Comments: {comment} </p>
-            {/* <input
-              type="text"
-              placeholder="Add a comment"
-              value={comments[book._id] || ""}
-              onChange={(e) =>
-                setComments({ ...comments, [book._id]: e.target.value })
-              }
-              className="comment-input"
-            /> */}
-            {/* <button
-              onClick={() => addComment(book._id, comments[book._id])}
-              className="add-button"
-            >
-              Add Comment
-            </button> */}
-            <button onClick={() => viewBook(book._id)} className="add-button">
-              View Book
-            </button>
-            {book.comments.map((comment, index) => (
-              <p key={index} className="comment-text">
-                Comment: {comment.quote}
-              </p>
-            ))}
-          </div>
+          <li key={`dashboard-${book._id}`} id={book._id} onClick={viewBook}>
+            {book.title}
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 };
