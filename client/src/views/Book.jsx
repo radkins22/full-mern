@@ -20,15 +20,15 @@ const Book = ({ user }) => {
         .then((res) => {
           const { msg, book, Error } = res.data;
           if (msg === "Success") {
+            console.log(book);
             setBook(book);
-            // setComments(res.data.comments || []);
+            setComments(book.comments);
           } else toast.warning(Error);
         })
         .catch((error) => {
           console.error("There was an error fetching the book data!", error);
         });
     };
-
     getBook();
   }, [_id]);
 
@@ -48,10 +48,10 @@ const Book = ({ user }) => {
       data,
       withCredentials: true,
     })
-      // .post(`/api/books/${id}/comments`, { comment })
       .then((res) => {
-        // setComments([...comments, res.data]);
-        // setComment("");
+        console.log("Comment Response:", res.data);
+        setBook(res.data.book);
+        setComments(res.data.book.comments);
       })
       .catch((error) => {
         console.error("There was an error submitting the comment!", error);
@@ -71,11 +71,6 @@ const Book = ({ user }) => {
       </button>
       <div>
         <h3>Comments</h3>
-        <ul>
-          {comments.map((comment, index) => (
-            <li key={index}>{comment}</li>
-          ))}
-        </ul>
         <form onSubmit={handleCommentSubmit}>
           <textarea
             name="quote"
@@ -86,6 +81,12 @@ const Book = ({ user }) => {
           <input type="submit" className="add-button" value="Submit" />
         </form>
       </div>
+      <ul>
+        <li>Comments</li>
+        {comments?.map((comment, index) => (
+          <li key={index}>{comment.quote}</li>
+        ))}
+      </ul>
     </div>
   );
 };
