@@ -4,12 +4,22 @@ import "./dashboard.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
+const Dashboard = ({ user }) => {
+
 const Dashboard = ({ user, comment }) => {
   const nav = useNavigate();
+
   const [books, setBooks] = useState([]);
   const [newBook, setNewBook] = useState({ title: "", author: "" });
 
   useEffect(() => {
+
+    // api call to fetch all books
+    // setBooks(response.data)
+  }, []);
+
+  const addBook = () => {
+
     // IIFE - Immediately Invoked Function Expression
     // (async()=> {
     //   await axios

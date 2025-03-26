@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+
 import axios from "axios";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "./register.css";
@@ -18,6 +19,17 @@ const Home = ({ handleUserAuth }) => {
 
   const handleValidation = (obj) => {
     if (isReg && !obj.username) {
+
+      toast.warning("Please enter a username.");
+      return false;
+    }
+    if (!obj.email) {
+      toast.warning("Please enter an email.");
+      return false;
+    }
+    if (!obj.password) {
+      toast.warning("Please enter a password.");
+
       toast.error("Please enter a username.");
       return false;
     }
@@ -27,6 +39,7 @@ const Home = ({ handleUserAuth }) => {
     }
     if (!obj.password) {
       toast.error("Please enter a password.");
+
       return false;
     }
     return true;
@@ -102,8 +115,12 @@ const Home = ({ handleUserAuth }) => {
           </button>
           <p className="signin-link" onClick={handleToggle}>
             {isReg
+              ? "Already have an account? Login here."
+              : "Don't have an account? Register Here."}
+
               ? "Already have an account? Login Here"
               : "Don't have an account? Register Here"}
+
           </p>
         </form>
       </div>

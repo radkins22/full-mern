@@ -43,3 +43,9 @@
 .signup-button:hover {
   background-color: #2563eb;
 }
+
+.signin-link {
+  text-decoration: underline;
+  color: #f63bc4;
+  cursor: pointer;
+}
