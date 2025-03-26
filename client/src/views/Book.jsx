@@ -2,9 +2,12 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import useAuth from "../hooks/useAuth";
+import Comment from "../Components/Comment";
 import "./dashboard.css";
 
-const Book = ({ user }) => {
+const Book = () => {
+  const user = useAuth();
   const nav = useNavigate();
   const { _id } = useParams();
   // book by id state vars
@@ -20,15 +23,15 @@ const Book = ({ user }) => {
         .then((res) => {
           const { msg, book, Error } = res.data;
           if (msg === "Success") {
+            console.log(book);
             setBook(book);
-            // setComments(res.data.comments || []);
+            setComments(book.comments);
           } else toast.warning(Error);
         })
         .catch((error) => {
           console.error("There was an error fetching the book data!", error);
         });
     };
-
     getBook();
   }, [_id]);
 
@@ -48,10 +51,10 @@ const Book = ({ user }) => {
       data,
       withCredentials: true,
     })
-      // .post(`/api/books/${id}/comments`, { comment })
       .then((res) => {
-        // setComments([...comments, res.data]);
-        // setComment("");
+        console.log("Comment Response:", res.data);
+        setBook(res.data.book);
+        setComments(res.data.book.comments);
       })
       .catch((error) => {
         console.error("There was an error submitting the comment!", error);
@@ -70,12 +73,7 @@ const Book = ({ user }) => {
         Back to Dashboard
       </button>
       <div>
-        <h3>Comments</h3>
-        <ul>
-          {comments.map((comment, index) => (
-            <li key={index}>{comment}</li>
-          ))}
-        </ul>
+        <h3>Add Comment Form</h3>
         <form onSubmit={handleCommentSubmit}>
           <textarea
             name="quote"
@@ -85,6 +83,17 @@ const Book = ({ user }) => {
           />
           <input type="submit" className="add-button" value="Submit" />
         </form>
+      </div>
+      <h3>Comments</h3>
+      <div className="comment-container">
+        {comments?.map((comment) => (
+          <Comment
+            key={comment._id}
+            commentObj={comment}
+            ant={7}
+            rachael={["a", "b", "c"]}
+          />
+        ))}
       </div>
     </div>
   );

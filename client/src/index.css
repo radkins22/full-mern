@@ -1,0 +1,27 @@
+.quote-card {
+  margin-bottom: 2px;
+  padding: 10px 40px;
+  background-color: #efefef;
+  border-bottom: 1px solid #aaa;
+}
+.quote-card button {
+  float: right;
+  position: relative;
+  top: -10px;
+  right: -30px;
+  color: lightcoral;
+}
+.quote-card button:hover {
+  color: red;
+}
+.quote {
+  font-family: "SUSE", serif;
+  font-weight: 600;
+  font-size: 24px;
+}
+.uname {
+  font-family: "Oswald", sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  font-style: italic;
+}

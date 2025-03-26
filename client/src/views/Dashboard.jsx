@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./dashboard.css";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
-const Dashboard = ({ user, comment }) => {
+const Dashboard = () => {
+  const user = useAuth();
   const nav = useNavigate();
   const [books, setBooks] = useState([]);
   const [newBook, setNewBook] = useState({ title: "", author: "" });
@@ -54,6 +55,22 @@ const Dashboard = ({ user, comment }) => {
     }
   };
 
+  const handleLogout = () => {
+    axios({
+      method: "POST",
+      url: "http://localhost:8080/api/users/logout",
+      withCredentials: true,
+    })
+      // .get("http://localhost:8080/api/users/logout")
+      .then((res) => {
+        console.log("Logout Response:", res.data);
+        nav("/");
+      })
+      .catch((error) => {
+        console.error("Error logging out:", error);
+      });
+  };
+
   const viewBook = (e) => nav(`/books/${e.target.id}`);
 
   // const addComment = (id, comment) => {
@@ -75,9 +92,9 @@ const Dashboard = ({ user, comment }) => {
       <div className="input-container">
         <div className="welcome-container">
           <h1 className="welcome-text">Welcome, {user?.username}!</h1>
-          <p className="signout-link">
-            <Link to="/">Sign out</Link>
-          </p>
+          <button className="signout-link" onClick={handleLogout}>
+            Log Out
+          </button>
         </div>
         <h2 className="add-book-title">Add a Book</h2>
         <input
