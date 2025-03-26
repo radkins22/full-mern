@@ -1,27 +1,83 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import "./dashboard.css";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = ({ user }) => {
+
+const Dashboard = ({ user, comment }) => {
+  const nav = useNavigate();
+
   const [books, setBooks] = useState([]);
   const [newBook, setNewBook] = useState({ title: "", author: "" });
-  const [comments, setComments] = useState({});
 
   useEffect(() => {
+
     // api call to fetch all books
     // setBooks(response.data)
   }, []);
 
   const addBook = () => {
+
+    // IIFE - Immediately Invoked Function Expression
+    // (async()=> {
+    //   await axios
+    //   .get("http://localhost:8080/api/books")
+    //   .then((res) => {
+    //     console.log("All Books Response:", res.data);
+    //     setBooks(res.data.books);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error fetching books:", error);
+    //   });
+    // })()
+
+    const getBooks = async () => {
+      await axios
+        .get("http://localhost:8080/api/books")
+        .then((res) => {
+          console.log("All Books Response:", res.data);
+          setBooks(res.data.books);
+        })
+        .catch((error) => {
+          console.error("Error fetching books:", error);
+        });
+    };
+
+    getBooks();
+  }, []);
+
+  const addBook = (e) => {
+    e.preventDefault();
     if (newBook.title && newBook.author) {
-      setBooks([...books, { ...newBook, id: Date.now() }]);
-      setNewBook({ title: "", author: "" });
+      axios
+        .post("http://localhost:8080/api/books", newBook)
+        .then((res) => {
+          console.log("Book Response:", res.data);
+          setBooks([...books, res.data.book]);
+          setNewBook({ title: "", author: "" });
+        })
+        .catch((error) => {
+          console.error("Error adding book:", error);
+        });
     }
   };
 
-  const addComment = (id, comment) => {
-    setComments({ ...comments, [id]: comment });
-  };
+  const viewBook = (e) => nav(`/books/${e.target.id}`);
+
+  // const addComment = (id, comment) => {
+  //   axios
+  //     .put(`http://localhost:8080/api/books/${id}/comment`, { comment })
+  //     .then((res) => {
+  //       console.log("Comment Response:", res.data);
+  //       setBooks(books.map((book) => (book._id === id ? res.data.book : book)));
+  //       setComments({ ...comments, [id]: "" });
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error adding comment:", error);
+  //     });
+  // };
 
   return (
     <div className="library-dashboard">
@@ -30,7 +86,7 @@ const Dashboard = ({ user }) => {
         <div className="welcome-container">
           <h1 className="welcome-text">Welcome, {user?.username}!</h1>
           <p className="signout-link">
-            <Link to="/login">Sign out</Link>
+            <Link to="/">Sign out</Link>
           </p>
         </div>
         <h2 className="add-book-title">Add a Book</h2>
@@ -52,23 +108,14 @@ const Dashboard = ({ user }) => {
           Add Book
         </button>
       </div>
-      <div className="book-list">
+      <ul className="book-list">
+        {/* map through all books, display them, have the ability to select a specific book */}
         {books.map((book) => (
-          <div key={book.id} className="book-card">
-            <h2 className="book-title">{book.title}</h2>
-            <p className="book-author">by {book.author}</p>
-            <input
-              type="text"
-              placeholder="Add a comment"
-              onChange={(e) => addComment(book.id, e.target.value)}
-              className="comment-input"
-            />
-            {comments[book.id] && (
-              <p className="comment-text">Comment: {comments[book.id]}</p>
-            )}
-          </div>
+          <li key={`dashboard-${book._id}`} id={book._id} onClick={viewBook}>
+            {book.title}
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 };

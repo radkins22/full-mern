@@ -1,3 +1,4 @@
+
 import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -18,6 +19,7 @@ const Home = ({ handleUserAuth }) => {
 
   const handleValidation = (obj) => {
     if (isReg && !obj.username) {
+
       toast.warning("Please enter a username.");
       return false;
     }
@@ -27,6 +29,17 @@ const Home = ({ handleUserAuth }) => {
     }
     if (!obj.password) {
       toast.warning("Please enter a password.");
+
+      toast.error("Please enter a username.");
+      return false;
+    }
+    if (!obj.email) {
+      toast.error("Please enter an email.");
+      return false;
+    }
+    if (!obj.password) {
+      toast.error("Please enter a password.");
+
       return false;
     }
     return true;
@@ -104,6 +117,10 @@ const Home = ({ handleUserAuth }) => {
             {isReg
               ? "Already have an account? Login here."
               : "Don't have an account? Register Here."}
+
+              ? "Already have an account? Login Here"
+              : "Don't have an account? Register Here"}
+
           </p>
         </form>
       </div>
