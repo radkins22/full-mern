@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "./register.css";
 
-const Home = ({ handleUserAuth }) => {
+const Home = () => {
   const nav = useNavigate();
   const [isReg, setIsReg] = useState(false);
   const [formData, setFormData] = useState({});
@@ -49,7 +49,6 @@ const Home = ({ handleUserAuth }) => {
           if (msg === "Success") {
             if (!isReg) {
               toast.success("Login successful!");
-              handleUserAuth(user);
               nav("/dashboard");
             } else {
               toast.success("Registration successful!");

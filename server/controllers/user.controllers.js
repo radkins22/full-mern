@@ -40,6 +40,7 @@ module.exports = {
   },
 
   auth: (req, res) => {
+    console.log(req)
     if (req.user) res.json({ msg: "Success", user: req.user });
     else res.json({ msg: "Error", Error: "User not authenticated" });
   },

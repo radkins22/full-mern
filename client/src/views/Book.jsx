@@ -2,9 +2,12 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import useAuth from "../hooks/useAuth";
+import Comment from "../Components/Comment";
 import "./dashboard.css";
 
-const Book = ({ user }) => {
+const Book = () => {
+  const user = useAuth();
   const nav = useNavigate();
   const { _id } = useParams();
   // book by id state vars
@@ -70,7 +73,7 @@ const Book = ({ user }) => {
         Back to Dashboard
       </button>
       <div>
-        <h3>Comments</h3>
+        <h3>Add Comment Form</h3>
         <form onSubmit={handleCommentSubmit}>
           <textarea
             name="quote"
@@ -81,12 +84,15 @@ const Book = ({ user }) => {
           <input type="submit" className="add-button" value="Submit" />
         </form>
       </div>
-      <ul>
-        <li>Comments</li>
-        {comments?.map((comment, index) => (
-          <li key={index}>{comment.quote}</li>
+      <h3>Comments</h3>
+      <div className="comment-container">
+        {comments?.map((comment) => (
+          <Comment
+            key={comment._id}
+            commentObj={comment}
+          />
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
